@@ -1,0 +1,84 @@
+<html>
+    <head>
+        <title>University</title>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <link rel="stylesheet" href="../static/css/pg_table.css">
+    </head>
+    <body>
+        <p>Enter the co mark it will automatically fill it in all co</p>
+        <table border="1">
+            <tbody id="table">
+                <tr>
+                    <th>Regno</th>
+                    <th>Student name</th>
+                    <th>Attendance</th>
+                    <th id="co" data-value="{{cono|length}}">Co Mark</th>
+                </tr>
+                {% for stud in student%}
+                {% set outer_loop = loop%}
+                    <tr>
+                        <th data-value="{{stud[0]}}" id="{{loop.index}}regno">{{stud[0]}}</th>
+                        <th data-value="{{stud[1]}}" id="{{loop.index}}name">{{stud[1]}}</th>
+                        <th>
+                            <select name="attend" id="{{loop.index}}attend">
+                                <option value="1" selected>Present</option>
+                                <option value="0">Absent</option>
+                            </select>
+                        </th>
+                        <th>
+                            <input type="number" name="comark" id="{{loop.index}}">
+                        </th>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <input type="submit" value="Submit" onclick="data()">
+    </body>
+    <script>
+        var pg_data=[]
+        var pg_data_full=[]
+        tablename=document.getElementById('table');
+        var no_of_col=tablename.children.length-1;
+        var no_co=document.getElementById('co').dataset.value;
+        function data(){
+            pg_data=[];
+            pg_data.push("1");
+            pg_data.push("max mark");
+            pg_data.push("0");
+            alert(no_co);
+            for(i=1;i<=no_co;i++){
+                pg_data.push("75");
+            }
+            pg_data_full.push(pg_data);
+            for(i=1;i<=no_of_col;i++){
+                pg_data=[];
+                pg_data.push(document.getElementById(i+'regno').dataset.value);
+                pg_data.push(document.getElementById(i+'name').dataset.value);
+                pg_data.push(document.getElementById(i+'attend').value);
+                val=document.getElementById(i).value;
+                for(j=1;j<=no_co;j++){
+                    if(val!=''){
+                        pg_data.push(val);
+                    
+                    }else{
+                        pg_data.push(null);
+                    }
+                }
+                pg_data_full.push(pg_data);
+            }
+        
+            $.ajax({
+                type:"POST",
+                url:"/pg_uni_value",
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify({ data: pg_data_full }),
+                success:function(data){
+                    location.href='pg_uni_value'
+                }
+            });
+        
+            pg_data_full=[]
+        }
+
+    </script>
+</html>

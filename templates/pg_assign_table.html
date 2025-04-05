@@ -1,0 +1,126 @@
+<html>
+    <head>
+        <title>Head</title>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <link rel="stylesheet" href="../static/css/pg_table.css">
+    </head>
+    <body>
+        <table border="1" >
+            <tbody id="table">
+            <tr>
+                <th colspan="2" rowspan="3"> </th>
+            </tr>
+            <tr>
+                <th id="parta" data-value="{{session['parta']}}">Question no :</th>
+                {% for i in range(0,session['parta']|int) %}
+                <th>Q{{i|int +1}}</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th>CO :</th>
+                {% for i in range(0,session['parta']|int)%}
+                <th>
+                    <select name="aco{{i|int+1}}" id="aco{{i|int+1}}">
+                        {% for co in cono %}
+                        <option data-value="{{co}}">{{co}}</option>
+                        {% endfor %}
+                    </select>
+                </th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th>Regno</th>
+                <th>Student name</th>
+                <th>Max mark</th>
+                {% for i in range(0,session['parta']|int)%}
+                <th>
+                    <input type="number" name="am{{i|int+1}}" id="am{{i|int+1}}">
+                </th>
+                {% endfor %}
+            </tr>
+            {% for stud in student%}
+            {% set outer_loop = loop%}
+                <tr>
+                    <th data-value="{{stud[0]}}" id="{{loop.index}}regno">{{stud[0]}}</th>
+                    <th data-value="{{stud[1]}}" id="{{loop.index}}name">{{stud[1]}}</th>
+                    <th>
+                        <select name="attend" id="{{loop.index}}attend">
+                            <option value="1" selected>Present</option>
+                            <option value="0">Absent</option>
+                        </select>
+                    </th>
+                    {% for i in range(0,session['parta']|int)%}
+                    <th>
+                        <input type="number" name="" id="{{outer_loop.index}}aq{{i|int+1}}">
+                    </th>
+                    {% endfor %}
+                </tr>
+                
+            {% endfor %}
+            </tbody>
+        </table>
+        <input type="submit" value="Submit" onclick="data()">
+    </body>
+    <script>
+        var pg_data=[]
+        var pg_data_full=[]
+        var part_a_mark=0
+        tablename=document.getElementById('table');
+        no_of_col=tablename.children.length-4;
+        no_of_qa=document.getElementById('parta').dataset.value;
+        function data(){
+            pg_data=[];
+            pg_data.push("1");
+            pg_data.push("COs");
+            pg_data.push("0")
+            for(i=1;i<=no_of_qa;i++){
+                pg_data.push(document.getElementById('aco'+i).value);
+            }
+            pg_data_full.push(pg_data);
+            pg_data=[];
+            pg_data.push("2");
+            pg_data.push("max mark");
+            pg_data.push("0");
+            for(i=1;i<=no_of_qa;i++){
+                pg_data.push(document.getElementById('am'+i).value);
+            }
+            pg_data_full.push(pg_data);
+            flag=0;
+            for(i=1;i<=no_of_col;i++){
+                pg_data=[];
+                pg_data.push(document.getElementById(i+'regno').dataset.value);
+                pg_data.push(document.getElementById(i+'name').dataset.value);
+                pg_data.push(document.getElementById(i+'attend').value);
+                for(j=1;j<=no_of_qa;j++){
+                    val=document.getElementById(i+'aq'+j).value;
+                    mval=document.getElementById('am'+j).value;
+                    if(val!=''){
+                        if(parseInt(val)<=parseInt(mval)){
+                            pg_data.push(val);
+                        }else{
+                            str='Please enter mark of Q'+j+' Part A less than the max mark of '+document.getElementById(i+'regno').dataset.value+''
+                            alert(str);
+                            flag=1;
+                        }
+                    }else{
+                        pg_data.push(null);
+                    }
+                }
+                pg_data_full.push(pg_data);
+            }
+            if(flag==0){
+                $.ajax({
+                    type:"POST",
+                    url:"/pg_assign_value",
+                    contentType: "application/json;charset=UTF-8",
+                    data: JSON.stringify({ data: pg_data_full }),
+                    success:function(data){
+                        location.href='pg_assign_value'
+                    }
+                });
+            }
+            pg_data_full=[]
+            flag=0;
+        }
+    </script>
+</html>

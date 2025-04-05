@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:700|Poppins:400');
+
+:root {
+  --text: #ecf1ed;
+  --background: #090d0a;
+  --primary: #b2c7b7;
+  --secondary: #4a6764;
+  --accent: #7e9aa2;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Poppins';
+  font-weight: 700;
+}
+
+html {font-size: 100%;} /* 16px */
+h1 {font-size: 4.210rem; /* 67.36px */}
+h2 {font-size: 3.158rem; /* 50.56px */}
+h3 {font-size: 2.369rem; /* 37.92px */}
+h4 {font-size: 1.777rem; /* 28.48px */}
+h5 {font-size: 1.333rem; /* 21.28px */}
+small {font-size: 0.750rem; /* 12px */}
+
+body {
+    background-color: var(--background);
+    color: var(--text);
+    font-family: 'Poppins';
+    font-weight: 400;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.button{
+    background-color: var(--primary);
+    color: var(--background);
+    border-radius: 8px;
+    text-transform: uppercase;
+    height: 30px;
+    width: 100%;
+    transition-duration: .5s;
+    margin-top: 10%;
+}
+
+.button:hover{
+    background-color: var(--background);
+    color: var(--text);
+    border: 1px solid var(--primary);
+}
+
+select{
+    background-color: transparent;
+    color: var(--text);
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+option{
+    color: var(--background);
+}
+
+input{
+    background-color: transparent;
+    color: var(--text);
+    border: none;
+    width: 100%;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button{
+    -webkit-appearance: none;
+}
+
+.cal{
+    cursor: pointer;
+}
+
+.page1{
+    display: flex;
+    gap: 50px;
+    align-items: center;
+}
+
+.page2{
+    font-size: 1px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+}
+
+td{
+    padding: 2px;
+}
+
+table{
+    border-collapse: collapse;
+}
+@media print{
+    .nav{
+        display: none!important;
+    }
+    .page1{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .page2 table{
+        page-break-inside: avoid;
+    }
+}

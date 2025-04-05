@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <title>Password Change</title>
+        <link rel="stylesheet" href="../static/css/staffpasschange.css">
+    </head>
+    <body>
+        <h5>Need to change password</h5>
+        <form action="{{ url_for('passchange') }}" method="POST">
+            <div class="select">
+                <label for="npass">New Password:</label>
+                <input type="text" name="npass" id="npass" class="button">
+            </div>
+            <div class="select">
+                <label for="cpass">Confirm Password:</label>
+                <input type="text" name="cpass" id="cpass" class="button">
+            </div>
+            <div class="field">
+                <input type="submit" value="Change" class="button submit">
+            </div>
+        </form>
+    </body>
+</html>

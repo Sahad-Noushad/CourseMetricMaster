@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <title>Staff Login</title>
+        <link rel="stylesheet" href="../static/css/stafflogin.css">
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    </head>
+    <body>
+        <form action="{{ url_for('login') }}" method="post">
+            <div class="select">
+                <label for="Cls">Class:</label>
+                <select name="cls" id="cls" class="button" >
+                    <option value=" " disabled hidden selected>Class</option>
+                    <option value="ug">UG</option>
+                    <option value="pg">PG</option>
+                </select>
+            </div>
+            <div class="select">
+                <label for="name">name:</label>
+                <select name="name" id="name" class="button">
+                    <option value=" " selected disabled hidden>Name</option>
+                </select>
+            </div>
+            <div class="select">
+                <label for="sub">subject:</label>
+                <select name="sub" id="sub" class="button">
+                    <option value=" " selected disabled hidden>Subject</option>
+                </select>
+            </div>
+            <div class="field">
+                <input type="text" name="mobile_no" id="mobile_no" placeholder="Mobile Number" class="button">
+                <input type="password" name="pass" id="pass" placeholder="Password" class="button">
+                <input type="submit" value="Login" class="button submit">
+            </div>
+        </form>
+        <script>
+            document.getElementById('cls').addEventListener('change',function(){
+                $.getJSON('/updatedrop',{
+                    val:$('#cls').val(),
+                    search:'name'
+                }).done(function(data){
+                    $('#name').html(data.html_string)
+                })
+            });
+            document.getElementById('name').addEventListener('input',function(){
+                $.getJSON('/updatedrop',{
+                    val:$('#cls').val(),
+                    name:$('#name').val(),
+                    search:'sub'
+                }).done(function(data){
+                    $('#sub').html(data.html_string)
+                })
+            });
+
+        </script>
+    </body>
+</html>

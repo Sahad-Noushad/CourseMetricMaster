@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title>Staff</title>
+        <link rel="stylesheet" href="../static/css/staff.css">
+    </head>
+    <body>
+        <form action="{{ url_for('copoupload') }}" method="post" enctype="multipart/form-data">
+            <div class="select">
+                <label for="co_po">CO_PO sheet of :</label>
+                <input type="file" name="co_po" id="co_po" class="button upload">
+            </div>
+            <div class="select">
+                <label for="std">Student Details sheet:</label>
+                <input type="file" name="std" id="std" class="button upload">
+            </div>
+            <div class="select">
+                <label for="threshold">Threshold : </label>
+                <input type="number" name="threshold" id="threshold" class="button">
+            </div>
+            <div class="field">
+                <input type="submit" value="Next" class="button submit">
+            </div>
+        </form>
+    </body>
+</html>

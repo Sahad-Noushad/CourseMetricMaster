@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/admin.css">
+    <title>Login</title>
+</head>
+<body>
+    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+        <div class="field">
+            <label for="ug">Ug sheet:</label>
+            <input type="file" name="ug" id="ug" class="button">
+        </div>
+        <div class="field">
+            <label for="pg">Pg sheet:</label>
+            <input type="file" name="pg" id="pg" required class="button">
+        </div>
+        <div class="field"><input type="submit" value="Upload" class="button submit"></div>
+        <div class="field"><input type="button" value="Show databases" onclick="location.href='/datadb'" class="button submit"></div>
+    </form>
+</body>
+</html>

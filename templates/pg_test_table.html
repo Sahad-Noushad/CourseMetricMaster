@@ -1,0 +1,204 @@
+<html>
+    <head>
+        <title>Head</title>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <link rel="stylesheet" href="../static/css/pg_table.css">
+    </head>
+    <body>
+        <table border="1" >
+            {% set alph=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'] %}
+            <tbody id="table">
+            <tr>
+                <th colspan="2" rowspan="3"> </th>
+                <th></th>
+                {% for ch in range(0,session['part']) %}
+                    {% set char=alph[ch] %}
+                    <th colspan="{{session['part'+char]|int}}" id="part{{char}}" data-value="{{session['part'+char]}}">Part {{char}}</th>
+                {% endfor %}
+                <th rowspan="4">Total mark</th>
+            </tr>
+            <tr>
+                <th>Question no :</th>
+                {% for ch in range(0,session['part']) %}
+                    {% set char=alph[ch] %}
+                    {% for i in range(0,session['part'+char]|int) %}
+                        <th>Q{{i|int +1}}</th>
+                    {% endfor %}
+                {% endfor %}
+            </tr>
+            <tr>
+                <th>CO :</th>
+
+                {% for ch in range(0,session['part']) %}
+                    {% set char=alph[ch] %}
+                    {% for i in range(0,session['part'+char]|int)%}
+                    <th>
+                        <select name="{{char}}co{{i|int+1}}" id="{{char}}co{{i|int+1}}">
+                            {% for co in cono %}
+                            <option data-value="{{co}}">{{co}}</option>
+                            {% endfor %}
+                        </select>
+                    </th>
+                    {% endfor %}
+                {% endfor %}
+            </tr>
+            <tr>
+                <th>Regno</th>
+                <th>Student name</th>
+                <th>Max mark</th>
+                {% for ch in range(0,session['part']) %}
+                    {% set char=alph[ch] %}
+                    {% for i in range(0,session['part'+char]|int)%}
+                    <th>
+                        <input type="number" name="{{char}}m{{i|int+1}}" id="{{char}}m{{i|int+1}}">
+                    </th>
+                    {% endfor %}
+                {% endfor %}
+            </tr>
+            {% for stud in student%}
+            {% set outer_loop = loop%}
+                <tr>
+                    <td data-value="{{stud[0]}}" id="{{loop.index}}regno">{{stud[0]}}</td>
+                    <td data-value="{{stud[1]}}" id="{{loop.index}}name">{{stud[1]}}</td>
+                    <th>
+                        <select name="attend" id="{{loop.index}}attend">
+                            <option value="1" selected>Present</option>
+                            <option value="0">Absent</option>
+                        </select>
+                    </th>
+                    {% for ch in range(0,session['part']) %}
+                        {% set char=alph[ch] %}
+                        {% for i in range(0,session['part'+char]|int)%}
+                        <th>
+                            <input type="number" name="" id="{{outer_loop.index}}{{char}}q{{i|int+1}}">
+                        </th>
+                        {% endfor %}
+                    {% endfor %}
+                    <td name="{{outer_loop.index}}tmark" id="{{outer_loop.index}}" data-value="0" class="cal" onclick="mark(this.id)">Calculate</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <input type="submit" value="Submit" onclick="data()" class="button">
+    </body>
+    <script>
+        function mark(i){
+            var maxmark={};
+            var mark={};
+            var ormark={};
+            var partno = parseInt('{{session["part"]}}'); 
+
+            '{% for ch in range(0,session["part"]) %}'
+                '{% set char=alph[ch] %}'
+                mark['{{char}}']=[];
+                ormark['{{char}}']=[];
+
+                // making array of mark by part name
+                '{% for j in range(1,session["part"+char]|int+1)%}'
+                    var value=document.getElementById(i+'{{char}}'+'q'+'{{j}}').value;
+                    if(value==''){
+                        mark['{{char}}'].push(parseInt(0));
+                    }else{
+                        mark['{{char}}'].push(parseInt(value));
+                    }
+                '{% endfor %}'
+                maxmark['{{char}}']=0;
+                '{% if session["part"+char+"man"] == 0 %}'
+                // all qn are not mandatory
+                    '{% if session["part"+char+"spec"] == 0 %}' 
+                    // or qn are not specified
+                        mark['{{char}}'].sort((a,b)=>b-a) //sorting in descending order
+                        mark['{{char}}']=mark['{{char}}'].slice(0,'{{session["part"+char+"noor"]}}') //take only needed marks
+                        maxmark['{{char}}']=mark['{{char}}'].reduce((a,b)=>a+b,0); //cal total mark
+                    '{% else %}'
+                        '{% if session["part"+char]%2==0 %}'
+                        // specified or qn
+                            '{% for k in range(1,session["part"+char+"qnno"]|int+1) %}'
+                                ormark['{{char}}'].push(parseInt(Math.max(mark['{{char}}']['{{session["part"+char+"or"+k|string+"q1"]}}'-1],mark['{{char}}']['{{session["part"+char+"or"+k|string+"q2"]}}'-1]))) //finding largerst
+                            '{% endfor %}'
+                            maxmark['{{char}}']=ormark['{{char}}'].reduce((a,b)=>a+b,0); //cal max mark
+                        
+                        '{% else %}'
+                        // or qn are not specified
+                            mark['{{char}}'].sort((a,b)=>b-a) //sorting in descending order
+                            mark['{{char}}']=mark['{{char}}'].slice(0,'{{session["part"+char+"noor"]}}') //take only needed marks
+                            maxmark['{{char}}']=mark['{{char}}'].reduce((a,b)=>a+b,0); //cal total mark
+                        '{% endif %}'
+
+                    '{% endif %}'
+                '{% else %}'
+                    // sum of the mark coz all are mandatory
+                    maxmark['{{char}}']=mark['{{char}}'].reduce((a,b)=>a+b,0);
+                '{% endif%}'
+
+            '{% endfor %}'
+            var totalmark=Object.values(maxmark).reduce((a,b)=>a+b,0)
+            document.getElementById(i).innerHTML=totalmark
+            document.getElementById(i).dataset.value=totalmark
+            maxmark={}
+            ormark={}
+            mark={}
+        }
+        function data(){
+            tablename=document.getElementById('table');
+            no_of_col=tablename.children.length-4;
+            pg_data=[];
+            pg_data_full=[];
+            pg_data.push("1","COs","0","0");
+            '{% for ch in range(0,session["part"]) %}'
+                '{% set char=alph[ch] %}'
+                '{% for i in range(1,session["part"+char]|int+1)%}'
+                    pg_data.push(document.getElementById('{{char}}'+'co'+'{{i}}').value);
+                '{% endfor %}'
+            '{% endfor %}'
+            pg_data_full.push(pg_data);
+            pg_data=[];
+            pg_data.push("2","max mark","0","0")
+            '{% for ch in range(0,session["part"]) %}'
+                '{% set char=alph[ch] %}'
+                '{% for i in range(1,session["part"+char]|int+1)%}'
+                    pg_data.push(document.getElementById('{{char}}'+'m'+'{{i}}').value);
+                '{% endfor %}'
+            '{% endfor %}'
+            pg_data_full.push(pg_data);
+            flag=0;
+            for(i=1;i<=no_of_col;i++){
+                pg_data=[];
+                pg_data.push(document.getElementById(i+'regno').dataset.value,document.getElementById(i+'name').dataset.value,document.getElementById(i+'attend').value,document.getElementById(i).dataset.value);
+                '{% for ch in range(0,session["part"]) %}'
+                    '{% set char=alph[ch] %}'
+                    '{% for j in range(1,session["part"+char]|int+1)%}'
+                        val=document.getElementById(i+'{{char}}'+'q'+'{{j}}').value;
+                        mval=document.getElementById('{{char}}'+'m'+'{{j}}').value;
+                        if(val!=''){
+                            if(parseInt(val)<=parseInt(mval)){
+                                pg_data.push(val);
+                            }else{
+                                str='Please enter mark of Q'+'{{j}}'+' Part '+'{{char}}'+' less than the max mark of '+document.getElementById(i+'regno').dataset.value+''
+                                alert(str);
+                                flag=1;
+                            }
+                        }else{
+                            pg_data.push(null);
+                        }
+                    '{% endfor %}'
+                '{% endfor %}'
+                pg_data_full.push(pg_data);
+            }
+            console.log(pg_data_full)
+            if(flag==0){
+                $.ajax({
+                    type:"POST",
+                    url:"/pg_test_value",
+                    contentType: "application/json;charset=UTF-8",
+                    data: JSON.stringify({ data: pg_data_full }),
+                    success:function(data){
+                        location.href='pg_test_value'
+                    }
+                });
+            }
+            pg_data_full=[]
+            flag=0;
+        }
+    </script>
+</html>

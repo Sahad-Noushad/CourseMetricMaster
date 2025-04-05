@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/datadb.css">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    <header>Available Databases :</header>
+    <form action="{{url_for('db')}}" method="post">
+        <div class="field">
+            <label for="Staff">Staff Database :</label>
+            <input type="button" name="Staff" value="Show database" onclick="location.href='/excel'" class="button submit">
+        </div>
+        <label for="dbname">Available Subject Databases :</label>
+        <div class="select">
+            <select name="dbname" onchange="this.form.submit()" class="button">
+                {% for tables in tablenames %}
+                    <option value=" " selected hidden disabled>Select Database</option>
+                    <optgroup label="{{tables}}">
+                        {% for table in tablenames[tables]%}
+                            <option value="{{table[0]}}">{{table[0]}}</option>
+                        {% endfor %}
+                    </optgroup>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+</body>
+</html>

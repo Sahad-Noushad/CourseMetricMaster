@@ -1,0 +1,175 @@
+<html>
+    <head>
+        <title>PG data</title>
+        <link rel="stylesheet" href="../static/css/pg_data.css">
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    </head>
+    <body>
+        <form action="{{url_for('pg_test')}}" method="post" onsubmit="subm()">
+            <div class="select">
+                <label for="date">Date : </label>
+                <input type="date" name="date" id="date" class="button">
+            </div>
+            <div class="select">
+                <label for="starttime">Start Time : </label>
+                <input type="time" name="starttime" id="starttime" class="button">
+            </div>
+            <div class="select">
+                <label for="endtime">End Time : </label>
+                <input type="time" name="endtime" id="endtime" class="button">
+            </div>
+            <div class="select mark">
+                <input type="number" name="maxmark" id="maxmark" placeholder="Max Mark" class="button">
+                <input type="number" name="passmark" id="passmark" placeholder="Pass Mark" class="button">
+            </div>
+            <div class=" part">
+                <div class="btn">
+                    <h5>Part :</h5>
+                    <button type="button" onclick="parts('add')" >+</button>
+                    <button type="button" onclick="parts('sub')" >-</button>
+                </div>
+                <div id="partno" class="partno">
+                </div>
+                <input type="number" name="partnumber" id="partnumber" style="display: none;">
+            </div>
+            <div class="field">
+                <input type="submit" value="Submit" class="button submit">
+            </div>
+        </form>
+        <script>
+            var flag1={}
+            var flag2={}
+            var no={}
+            var partno=96
+            var i={}
+            function parts(type){
+                if(type=='add'){
+                    partno++;
+                    text=
+                    '<div class="divpart" id="divpart'+String.fromCharCode(partno)+'">'+
+                        '<div class="select">'+
+                            '<label for="part'+String.fromCharCode(partno)+'">Part '+String.fromCharCode(partno)+'</label>'+
+                            '<input type="number" placeholder="No. of questions" name="qn'+String.fromCharCode(partno)+'" id="qn'+String.fromCharCode(partno)+'" class="button">'+
+                        '</div>'+
+                        '<div class="select" id="pcheck1'+String.fromCharCode(partno)+'">'+
+                            '<label for="check1'+String.fromCharCode(partno)+'">All are mandatory</label>'+
+                            '<select name="check1'+String.fromCharCode(partno)+'" id="check1'+String.fromCharCode(partno)+'" class="button" onchange="fun1(this.value,this.id)">'+
+                                '<option value=" " disabled hidden selected>Choose...</option>'+
+                                '<option value="1">Yes</option>'+
+                                '<option value="0">No</option>'+
+                            '</select>'+
+                        '</div>'+
+                        '<input type="number" name="qnno'+String.fromCharCode(partno)+'" id="qnno'+String.fromCharCode(partno)+'" style="display:none;">'+
+                    '</div>'
+                    ;
+                    partdiv=document.getElementById('partno');
+                    partdiv.innerHTML+=text;
+                    text='';
+                    flag1[String.fromCharCode(partno)]=0
+                    flag2[String.fromCharCode(partno)]=0
+                    no[String.fromCharCode(partno)]=0
+                    i[String.fromCharCode(partno)]=0
+                }else{
+                    document.getElementById('partno').lastChild.remove();
+                    partno--;
+                }
+            }
+            function fun1(value,id){
+                noofqn=document.getElementById('qn'+id.substr(-1)).value;
+                if(value==0&&flag1[id.substr(-1)]==0&&noofqn%2==0&&noofqn!=0){
+                    flag1[id.substr(-1)]=1;
+                    text=
+                    '<div class="select" id="pcheck2'+id.substr(-1)+'">'+
+                        '<label for="check2'+id.substr(-1)+'">Are you want to select no. of question from above</label>'+
+                        '<select name="check2'+id.substr(-1)+'" id="check2'+id.substr(-1)+'" class="button" onchange="fun2(this.value,this.id)">'+
+                            '<option value=" " disabled hidden selected>Choose...</option>'+
+                            '<option value="1">Yes</option>'+
+                            '<option value="0">No</option>'+
+                        '</select>'+
+                    '</div>'
+                    ;
+                    document.getElementById('check1'+id.substr(-1)).options[2].setAttribute('selected','selected')
+                }
+                else if(value==0&&flag1[id.substr(-1)]==0&&noofqn%2!=0&&noofqn!=0){
+                    flag1[id.substr(-1)]=1;
+                    text=
+                    '<div class="select" id="pcheck2'+id.substr(-1)+'">'+
+                        '<label for="check3'+id.substr(-1)+'">No. of questions to be answered</label>'+
+                        '<input type="number" id="check3'+id.substr(-1)+'" name="check3'+id.substr(-1)+'" class="button">'+
+                    '</div>'
+                    ;
+                    document.getElementById('check1'+id.substr(-1)).options[2].setAttribute('selected','selected')
+                }
+                else if(value==1){
+                    document.getElementById('check1'+id.substr(-1)).options[1].setAttribute('selected','selected')
+                }
+                div=document.getElementById('divpart'+id.substr(-1));
+                console.log(div)
+                div.innerHTML+=text;
+                text='';
+                document.getElementById('qn'+id.substr(-1)).setAttribute('value',noofqn)
+            }
+
+            function fun2(value,id){
+                if(value==1&&flag2[id.substr(-1)]==0){
+                    i[id.substr(-1)]++;
+                    flag2[id.substr(-1)]=1;
+                    text=
+                    '<div class="select orqn" id="orqn'+id+'">'+
+                        '<div class="select or or'+i[id.substr(-1)]+'">'+
+                            '<label>Question no.</label>'+
+                            '<input type="number" name="part'+id.substr(-1)+'or'+i[id.substr(-1)]+'qn1" class="button" placeholder="1">'+
+                            '<p>OR</p>'+
+                            '<input type="number" name="part'+id.substr(-1)+'or'+i[id.substr(-1)]+'qn2" class="button" placeholder="2">'+
+                            '<div class="btn">'+
+                                '<button type="button"  id='+id+' onclick="qn(\'add\',this.id)">+</button>'+
+                                '<button type="button"  id='+id+' onclick="qn(\'sub\',this.id)">-</button>'+
+                            '</div>'+  
+                        '</div>'+  
+                    '</div>'
+                    ;
+                    document.getElementById('check2'+id.substr(-1)).options[1].setAttribute('selected','selected')
+                }
+                else if(value==0&&flag2[id.substr(-1)]==0){
+                    flag2[id.substr(-1)]=1;
+                    text=
+                    '<div class="select" id="pcheck2'+id.substr(-1)+'">'+
+                        '<label for="check3'+id.substr(-1)+'">No. of questions to be answered</label>'+
+                        '<input type="number" name="check3'+id.substr(-1)+'" id="check3'+id.substr(-1)+'" class="button">'+
+                    '</div>'
+                    ;
+                    document.getElementById('check2'+id.substr(-1)).options[2].setAttribute('selected','selected')
+                }
+                document.getElementById('divpart'+id.substr(-1)).innerHTML+=text;
+                text='';
+                document.getElementById('qnno'+id.substr(-1)).setAttribute('value',i[id.substr(-1)]);
+            }
+
+            function qn(type,id){
+                qnno=document.getElementById('qn'+id.substr(-1)).value;
+                if(type=='add'&&i[id.substr(-1)]<(qnno/2)){
+                    i[id.substr(-1)]++
+                    newqn=
+                    '<div class="select or" id="or'+i[id.substr(-1)]+'"'+
+                        '<label>Question no.</label>'+
+                        '<input type="number" name="part'+id.substr(-1)+'or'+i[id.substr(-1)]+'qn1" class="button" >'+
+                        '<p>OR</p>'+
+                        '<input type="number" name="part'+id.substr(-1)+'or'+i[id.substr(-1)]+'qn2" class="button" >'+
+                    '</div>'
+                    ;
+                    div=document.getElementById('orqn'+id);
+                    div.innerHTML+=newqn;
+                }else if(type=='sub'&&i[id.substr(-1)]>1){
+                    i[id.substr(-1)]--
+                    document.getElementById('orqn'+id).lastChild.remove()
+                }
+                document.getElementById('qnno'+id.substr(-1)).setAttribute('value',i[id.substr(-1)]);
+            }
+            function subm(){
+                no_of_part=partno-96;
+                document.getElementById('partnumber').setAttribute('value',no_of_part);
+                return true;
+            }
+        </script>
+    </body>
+</html>

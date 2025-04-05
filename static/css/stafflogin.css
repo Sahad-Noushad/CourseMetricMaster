@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:700|Poppins:400');
+
+:root {
+  --text: #ecf1ed;
+  --background: #090d0a;
+  --primary: #b2c7b7;
+  --secondary: #4a6764;
+  --accent: #7e9aa2;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Poppins';
+  font-weight: 700;
+}
+
+html {font-size: 100%;} /* 16px */
+h1 {font-size: 4.210rem; /* 67.36px */}
+h2 {font-size: 3.158rem; /* 50.56px */}
+h3 {font-size: 2.369rem; /* 37.92px */}
+h4 {font-size: 1.777rem; /* 28.48px */}
+h5 {font-size: 1.333rem; /* 21.28px */}
+small {font-size: 0.750rem; /* 12px */}
+
+body {
+    background-color: var(--background);
+    color: var(--background);
+    font-family: 'Poppins';
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button{
+  background-color: var(--primary);
+  color: var(--background);
+  border-radius: 8px;
+}
+
+form{
+  background-color: var(--accent);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 30%;
+  height: 60%;
+  align-items: center;
+  border-radius: 5%;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+form .select{
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button{
+    -webkit-appearance: none;
+}
+
+form .select .button{
+  width: 70%;
+  height: 30px;
+  border: none;
+}
+
+form .field{
+  width: 90%;
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+form .field .button{
+  width: 90%;
+  height: 30px;
+  border: none;
+  transition-duration: 0.5s;
+}
+
+::placeholder{
+  padding-left: 10px;
+}
+
+form .field .submit{
+  text-transform: uppercase;
+  height: 30px;
+}
+
+form .field .submit:hover{
+  background-color: var(--background);
+  color: var(--text);
+}

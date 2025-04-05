@@ -1,0 +1,203 @@
+<html>
+    <head>
+        <title>
+            Test
+        </title>
+        <link rel="stylesheet" href="../static/css/test.css">
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    </head>
+    <body>
+        <div class="main">
+            <div class="mark">
+                <form action="{{url_for('test')}}" method="post">
+                    <div class="test" id="test">
+                        <div class="btn">
+                            <h5>Test :</h5>
+                            <button type="button" onclick="test('add')" >+</button>
+                            <button type="button" onclick="test('sub')" >-</button>
+                        </div>
+                        <div class="testno" id="testno">
+                            {% for i in range(0,number[0]|int)%}
+                            <div class="divtest{{i|int +1}} db" id="divtest{{i|int +1}}">
+                                <label for="test{{i|int +1}}">Test {{i|int +1}} :</label>
+                                <button name="button" id="test{{i|int +1}}" value="Test{{i|int +1}}" class="button" onclick="passdata(this.value)">Show Database</button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="assignment" id="assignment">
+                        <div class="btn">
+                            <h5>Assignment : </h5>
+                            <button type="button" onclick="assignment('add')" >+</button>
+                            <button type="button" onclick="assignment('sub')" >-</button>
+                        </div>
+                        <div class="assignmentno" id="assignmentno">
+                            {% for i in range(0,number[1]|int)%}
+                            <div class="divassignment{{i|int +1}} db" id="divassignment{{i|int +1}}">
+                                <label for="assignment{{i|int +1}}">Assignmet {{i|int +1}} :</label>
+                                <button name="button" id="assignment{{i|int +1}}" value="Assignment{{i|int +1}}" class="button" onclick="passdata(this.value)">Show Database</button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="seminar" id="seminar">
+                        <div class="btn">
+                            <h5>Seminar :</h5>
+                            <button type="button" onclick="seminar('add')" >+</button>
+                            <button type="button" onclick="seminar('sub')" >-</button>
+                        </div>
+                        <div class="seminarno" id="seminarno">
+                            {% for i in range(0,number[2]|int)%}
+                            <div class="divseminar{{i|int +1}} db" id="divseminar{{i|int +1}}">
+                                <label for="seminar{{i|int +1}}">Seminar {{i|int +1}} :</label>
+                                <button name="button" id="seminar{{i|int +1}}" value="Seminar{{i|int +1}}" class="button" onclick="passdata(this.value)">Show Database</button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="model" id="model">
+                        <div class="btn">
+                            <h5>Model :</h5>
+                            <button type="button" onclick="model('add')" >+</button>
+                            <button type="button" onclick="model('sub')" >-</button>
+                        </div>
+                        <div class="modelno" id="modelno">
+                            {% for i in range(0,number[3]|int)%}
+                            <div class="divmodel{{i|int +1}} db" id="divmodel{{i|int +1}}">
+                                <label for="model{{i|int +1}}">Model {{i|int +1}} :</label>
+                                <button name="button" id="model{{i|int +1}}" value="Model{{i|int +1}}" class="button" onclick="passdata(this.value)">Show Database</button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="university" id="university">
+                        {% if number[4]|int ==0 %}
+                            <label for="univalue">University :</label>
+                            <button name="button" id="univalue" value="university" class="button" onclick="this.form.submit()">Create</button>
+                        {% else %}
+                            <p>University mark added</p>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+            <div class="co" id="co">
+                {% if number[5]|int == 0 %}
+                <form action="{{url_for('co_attain')}}" method="post" class="co">
+                    <input type="submit" value="CO Attainment" class="button">
+                </form>
+                {% else %}
+                <form action="{{url_for('codata')}}" method="post" class="co">
+                    <input type="submit" value="CO & PO Attainment Result" class="button">
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        
+    </body>
+    <script>
+        var testno
+        testdiv=document.getElementById('testno')
+        testnonew=testno=testdiv.children.length
+        var assignmentno
+        assignmentdiv=document.getElementById('assignmentno')
+        assignmentnonew=assignmentno=assignmentdiv.children.length
+        var seminarno
+        seminardiv=document.getElementById('seminarno')
+        seminarnonew=seminarno=seminardiv.children.length
+        var modelno
+        modeldiv=document.getElementById('modelno')
+        modelnonew=modelno=modeldiv.children.length
+        function test(type){
+            if (type=='add') {
+                testno++;
+                newtest=
+                '<div class="divtest'+testno+' db" id="divtest'+testno+'">'+
+                '<label for="test'+testno+'">Test '+testno+' :</label>'+
+                '<button name="button" id="test'+testno+'" value="Test'+testno+'" class="button" onclick="this.form.submit()">Create</button>'+
+                '</div>'
+                ;
+                div=document.getElementById('testno');
+                div.innerHTML+=newtest;
+            }else{
+                if (testno>testnonew){
+                    name='divtest'+testno
+                    div=document.getElementById(name);
+                    div.remove();
+                    testno--;
+                }
+            }
+        }
+        function assignment(type){
+            if (type=='add') {
+                assignmentno++;
+                newassignment=
+                '<div class="divassignment'+assignmentno+' db" id="divassignment'+assignmentno+'">'+
+                '<label for="assignment'+assignmentno+'">Assignmet '+assignmentno+' :</label>'+
+                '<button name="button" id="assignment'+assignmentno+'" value="Assignment'+assignmentno+'" class="button" onclick="this.form.submit()">Create</button>'+
+                '</div>'
+                ;
+                div=document.getElementById('assignmentno');
+                div.innerHTML+=newassignment;
+            }else{
+                if(assignmentno>assignmentnonew){
+                    name='divassignment'+assignmentno
+                    div=document.getElementById(name);
+                    div.remove();
+                    assignmentno--;
+                }
+            }
+        }
+        function seminar(type){
+            if (type=='add') {
+                seminarno++;
+                newseminar=
+                '<div class="divseminar'+seminarno+' db" id="divseminar'+seminarno+'">'+
+                '<label for="seminar'+seminarno+'">Seminar '+seminarno+' :</label>'+
+                '<button name="button" id="seminar'+seminarno+'" value="Seminar'+seminarno+'" class="button" onclick="this.form.submit()">Create</button>'+
+                '</div>'
+                ;
+                div=document.getElementById('seminarno');
+                div.innerHTML+=newseminar;
+            }else{
+                if(seminarno>seminarnonew){
+                    name='divseminar'+seminarno
+                    div=document.getElementById(name);
+                    div.remove();
+                    seminarno--;
+                }
+            }
+        }
+        function model(type){
+            if (type=='add') {
+                modelno++;
+                newmodel=
+                '<div class="divmodel'+modelno+' db" id="divmodel'+modelno+'">'+
+                '<label for="model'+modelno+'">Model '+modelno+' :</label>'+
+                '<button name="button" id="model'+modelno+'" value="Model'+modelno+'" class="button" onclick="this.form.submit()">Create</button>'+
+                '</div>'
+                ;
+                div=document.getElementById('modelno');
+                div.innerHTML+=newmodel;
+            }else{
+                if (modelno>modelnonew){
+                    name='divmodel'+modelno
+                    div=document.getElementById(name);
+                    div.remove();
+                    modelno--;
+                }
+            }
+        }
+
+        function passdata(data){
+            $.ajax({
+                type:"POST",
+                url:"/testdata",
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify({ data: data }),
+                success:function(data){
+                    location.href='testdbshow'
+                }
+            });
+        }
+    </script>
+</html>

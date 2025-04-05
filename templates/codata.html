@@ -1,0 +1,100 @@
+<html>
+    <head>
+        <title>CO data</title>
+        <script src="https://html2pdf.app/api.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <link rel="stylesheet" href="../static/css/pg_table.css">
+    </head>
+    <body>
+        <div class="page1"> 
+            <table border="1">
+                <tr>
+                    <th colspan="{{co|length+1}}">CO attainment</th>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    {% for c in co %}
+                        <th>{{c}}</th>
+                    {% endfor %}
+                </tr>
+                {% for data in table1 %}
+                <tr>
+                    {% for i in range(0,data|length)%}
+                    <td>{{data[i]}}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+            <img src="{{url_for('static',filename='images/'+pic)}}">
+        </div>
+        <p style="page-break-after: always;">&nbsp;</p>
+        <div class="nav">
+            <button type="button" onclick="window.print()">Print</button>
+        </div>
+        <p style="page-break-before: always;">&nbsp;</p>
+        <div class="page2" id="page2">
+            {% for table in table2 %}
+                <table border="1">
+                    <tr>
+                        <th colspan="2"></th>
+                        <th colspan="{{co|length*2}}">{{table}}</th>
+                    </tr>
+                    <tr>
+                        <th>Regno</th>
+                        <th>Name</th>
+                        {% for c in co%}
+                        <th colspan="2">{{c}}</th>
+                        {% endfor%}
+                    </tr>
+                    {% for data in stud%}
+                    <tr>
+                        {% for i in table2[table][data[0]]%}
+                            <td>{{i}}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </table>
+            {% endfor %}
+            <table border="1">
+                <tr>
+                    <th colspan="16">PO attainment</th>
+                </tr>
+                <tr>
+                    <th>COs</th>
+                    <th>PO1</th>
+                    <th>PO2</th>
+                    <th>PO3</th>
+                    <th>PO4</th>
+                    <th>PO5</th>
+                    <th>PO6</th>
+                    <th>PO7</th>
+                    <th>PO8</th>
+                    <th>PSO1</th>
+                    <th>PSO2</th>
+                    <th>PSO3</th>
+                    <th>PSO4</th>
+                    <th>PSO5</th>
+                    <th>PSO6</th>
+                    <th>COT</th>
+                </tr>
+                {% for data in table3 %}
+                <tr>
+                    {% for i in range(0,data|length)%}
+                        {% if data[i] is none %}
+                            <td>-</td>
+                        {%else%}
+                            <td>{{data[i]}}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <script>
+            function pdf(){
+                var element=document.getElementById('page2');
+                html2pdf(element);
+            }
+        </script>
+    </body>
+</html>

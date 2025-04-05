@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <title>data</title>
+        <link rel="stylesheet" href="../static/css/pg_table.css">
+    </head>
+    <body>
+        {% if not details %}
+            <p>No records available</p>
+        {% else %}
+        <table border="1">
+            <tr>
+                <th>mobile number</th>
+                <th>name</th>
+                <th>type</th>
+                <th>subject 1</th>
+                <th>subject 2</th>
+                <th>subject 3</th>
+                <th>subject 4</th>
+                <th>subject 5</th>
+                <th>pass changed</th>
+                <th>password</th>
+            </tr>
+            {% for data in details %}
+            <tr>
+                <th>{{data[0]}}</th>
+                <th>{{data[1]}}</th>
+                <th>{{data[2]}}</th>
+                <th>{{data[3]}}</th>
+                <th>{{data[4]}}</th>
+                <th>{{data[5]}}</th>
+                <th>{{data[6]}}</th>
+                <th>{{data[7]}}</th>
+                <th>{{data[8]}}</th>
+                <th>{{data[9]}}</th>
+            </tr> 
+            {% endfor %}
+        </table>
+        {% endif %}
+
+    </body>
+</html>

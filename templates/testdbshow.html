@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <title>
+            Db show
+        </title>
+    </head>
+    <body>
+        <table border="1">
+            <tr>
+                <th>id</th>
+                <th>type</th>
+                <th>subject</th>
+                <th>date</th>
+                <th>start_time</th>
+                <th>end_time</th>
+                <th>max_mark</th>
+                <th>pass_mark</th>
+                <th>part a</th>
+                <th>part b</th>
+                {% if type == "ug"%}
+                <th>part c</th>
+                <th>part d</th>
+                {% endif %}
+            </tr>
+            {% for data in rows %}
+            <tr>
+                <th>{{data[0]}}</th>
+                <th>{{data[1]}}</th>
+                <th>{{data[2]}}</th>
+                <th>{{data[3]}}</th>
+                <th>{{data[4]}}</th>
+                <th>{{data[5]}}</th>
+                <th>{{data[6]}}</th>
+                <th>{{data[7]}}</th>
+                <th>{{data[8]}}</th>
+                <th>{{data[9]}}</th>
+                {% if type == "ug"%}
+                <th>{{data[10]}}</th>
+                <th>{{data[11]}}</th>
+                {% endif %}
+            </tr> 
+            {% endfor %}
+        </table>
+    </body>
+</html>
